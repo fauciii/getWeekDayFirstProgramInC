@@ -1,214 +1,133 @@
-// C program to implement an interactive
-// snake game
-#include <conio.h>
-#include <ctype.h>
 #include <stdio.h>
-#include <stdlib.h>
-#include <windows.h>
-
-// Macros variable (HEIGHT, WIDTH)
-#define HEIGHT 20
-#define WIDTH 40
-
-// Array to store the coordinates of snake
-// tail (x-axis, y-axis)
-int snakeTailX[100], snakeTailY[100];
-
-// Variable to store the length of the
-// snake's tail
-int snakeTailLen;
-
-// Score and signal flags
-int gameover, key, score;
-
-// Coordinates of snake's head and fruit
-int x, y, fruitx, fruity;
-
-// Function to generate the fruit
-// within the boundary
-void setup() {
-    
-    // Flag to signal the gameover
-    gameover = 0;
-
-    // Initial coordinates of the snake
-    x = WIDTH / 2;
-    y = HEIGHT / 2;
-    
-    // Initial coordinates of the fruit
-    fruitx = rand() % WIDTH;
-    fruity = rand() % HEIGHT;
-    while (fruitx == 0)
-        fruitx = rand() % WIDTH;
-
-    while (fruity == 0)
-        fruity = rand() % HEIGHT;
-
-    // Score initialzed
-    score = 0;
-}
-
-// Function to draw the game field, snake
-// and fruit
-void draw() {
-    system("cls");
-    
-    // Creating top wall
-    for (int i = 0; i < WIDTH + 2; i++)
-        printf("-");
-    printf("\n");
-    
-    for (int i = 0; i < HEIGHT; i++) {
-        for (int j = 0; j <= WIDTH; j++) {
-
-            // Creating side walls with '#'
-            if (j == 0 || j == WIDTH)
-                printf("#");
-            
-            // Creating snake's head with 'O'
-            if (i == y && j == x)
-                printf("O");
-            
-            // Creating the sanke's food with '*'
-            else if (i == fruity && j == fruitx)
-                printf("*");
-            
-            // Creating snake's body with 'o'
-            else {
-                int prTail = 0;
-                for (int k = 0; k < snakeTailLen; k++) {
-                    if (snakeTailX[k] == j
-                        && snakeTailY[k] == i) {
-                        printf("o");
-                        prTail = 1;
-                    }
-                }
-                if (!prTail)
-                    printf(" ");
-            }
-        }
-      printf("\n");
-            
-    }
-    
-    // Creating bottom walls with '-'
-    for (int i = 0; i < WIDTH + 2; i++)
-        printf("-");
-     printf("\n");
-
-    // Print the score and instructions
-    printf("score = %d", score);
-    printf("\n");
-    printf("Press W, A, S, D for movement.\n");
-    printf("Press X to quit the game.");
-}
-
-// Function to take the real time input and
-// set the 'flag' variable accordingly
-void input() {
-    if (kbhit()) {
-        switch (tolower(getch())) {
-        case 'a':
-            if(key!=2)
-            key = 1;
-            break;
-        case 'd':
-            if(key!=1)
-            key = 2;
-            break;
-        case 'w':
-            if(key!=4)
-            key = 3;
-            break;
-        case 's':
-            if(key!=3)
-            key = 4;
-            break;
-        case 'x':
-            gameover = 1;
-            break;
+void convertDigitsInPlace(char *arr, int length) {
+    for(int i = 0; i < length; i++) {
+        if (arr[i] >= '0' && arr[i] <= '9') { 
+            arr[i] = arr[i] - '0'; //gibt es dann in richtig zahl from weil '0' 48 hat und '1' 49 und dann 49 - 48 = 1
         }
     }
 }
-
-// Function for the movement logic that
-// checks eat, move, collisions
-void logic() {
-    
-    // Updating the coordinates for continous
-    // movement of snake
-    int prevX = snakeTailX[0];
-    int prevY = snakeTailY[0];
-    int prev2X, prev2Y;
-    snakeTailX[0] = x;
-    snakeTailY[0] = y;
-    for (int i = 1; i < snakeTailLen; i++) {
-        prev2X = snakeTailX[i];
-        prev2Y = snakeTailY[i];
-        snakeTailX[i] = prevX;
-        snakeTailY[i] = prevY;
-        prevX = prev2X;
-        prevY = prev2Y;
-    }
-    
-    // Changing the direction of movement of snake
-    switch (key) {
-    case 1:
-        x--;
-        break;
-    case 2:
-        x++;
-        break;
-    case 3:
-        y--;
-        break;
-    case 4:
-        y++;
-        break;
-    default:
-        break;
-    }
-
-    // If the game is over
-    if (x < 0 || x >= WIDTH || y < 0 || y >= HEIGHT)
-        gameover = 1;
-        
-    // Checks for collision with the tail (o)
-    for (int i = 0; i < snakeTailLen; i++) {
-        if (snakeTailX[i] == x && snakeTailY[i] == y)
-            gameover = 1;
-    }
-
-    // If snake reaches the fruit
-    // then update the score
-    if (x == fruitx && y == fruity) {
-        fruitx = rand() % WIDTH;
-        fruity = rand() % HEIGHT;
-        while (fruitx == 0)
-            fruitx = rand() % WIDTH;
-
-        // Generation of new fruit
-        while (fruity == 0)
-            fruity = rand() % HEIGHT;
-        score += 10;
-         snakeTailLen++;
+const char unsigned monthCodeVal[256] = {
+    [1] = 0, [2] = 3, [3] = 3, [4] = 6, [5] = 1, [6] = 4,
+    [7] = 6, [8] = 2, [9] = 5, [10] = 0, [11] = 3, [12] = 0,
+    //Gap Year
+    [13] = 6,
+    [14] = 2,
+};
+void weekDayName(int day){
+    switch (day)
+    {
+        case 0:printf("Sonntag");break;
+        case 1:printf("Montag");break;
+        case 2:printf("Dienstag");break;
+        case 3:printf("Mittwoch");break;
+        case 4:printf("Donnerstag");break;
+        case 5:printf("Freitag");break;
+        case 6:printf("Samstag");break;   
+        default:break;
     }
 }
-
-void main() {
-  
-    // Initial set up that initialize the
-    // required variables
-    setup();
-
-    // Game loop starts here
-    while (!gameover) {
-
-        // Functions that will be called
-        // repeatedly after the given interval
-        draw();
-        input();
-        logic();
-        Sleep(33);
+int isGap(int wholeYear){
+    if(wholeYear%4 == 0){
+        return 0;
     }
+    return 1;
+}
+int validDate(char *date){
+    if(date[2] != '-' || date[5] != '-'){
+        return 1;
+    }
+    return 0;
+}
+int getDay(char *date){
+    int day;
+    day = date[0] *10 + date[1];
+
+    return day;
+}
+int getMonth(char *date){
+   int month;
+   month = date[3] * 10 + date[4];
+   
+   return month;
+}
+int getYear(char *date){
+    int year;
+    year = date[8] * 10 + date[9];
+    
+    return year;
+}
+int getDecade(char *date){
+    int decade;
+    decade = date[6] * 10 + date[7];
+
+    return decade;
+}
+int getWholeYear(char *date){
+    int wholeYear;
+    wholeYear = date[6] * 1000 + date[7] * 100 + date[8] * 10 + date[9];
+    
+    return wholeYear;
+}
+int yearCode(int twoDigYear){
+    return (twoDigYear + twoDigYear/4) % 7;
+}
+int monthCode(int month, int isGap){
+    int monthCodeReturn;
+    if(isGap == 0){
+        switch (month)
+        {
+        case 1:
+            month = 13;
+            break;
+        case 2:
+            month = 14;
+        default:
+            break;
+        }
+    }
+    monthCodeReturn = monthCodeVal[month];
+    return monthCodeReturn;
+}
+int decadeCode(int decade){
+    int decadeCodeReturn;
+    decadeCodeReturn = (6 - 2 * (decade % 4)) % 7;
+
+    return decadeCodeReturn;
+}
+
+
+int calcWeekDay(char *date){
+    if(validDate(date) ==1){
+        return -1;
+    }
+    int day         = getDay(date);
+    int month       = getMonth(date);
+    int year        = getYear(date);
+    int decade      = getDecade(date);
+    int wholeYear   = getWholeYear(date);
+    int gap         = isGap(wholeYear);
+    int yearC       = yearCode(year);
+    int monthC      = monthCode(month, gap);
+    int decadeC     = decadeCode(decade);
+    int weekDay     = (day + monthC + yearC + decadeC) % 7;
+    weekDay         = (weekDay + 7) % 7; //falls negativ
+    printf("day=%d month=%d year=%d decade=%d wholeYear=%d gap=%d yearC=%d monthC=%d decadeC=%d\n",day, month, year, decade, wholeYear, gap, yearC, monthC, decadeC);
+
+
+    return weekDay;
+}
+int main()
+{
+    char date[11];
+    printf("Geben Sie ein Datum im Format DD-MM-YYYY ein: ");
+    scanf("%10s", date);
+    convertDigitsInPlace(date, 10);
+    int weekDay = calcWeekDay(date);
+    if(weekDay == -1){
+        printf("Falsches Format\n");
+        return 0;
+    }
+    printf("%d\n", weekDay);
+    weekDayName(weekDay);
+    return 0;
 }
